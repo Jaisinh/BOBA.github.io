@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Winter Theme</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: linear-gradient(to bottom, #A7C7E7, #A8D8EA); color: white; text-align: center; }
+        #snowflakes { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .snowflake { position: absolute; top: -10px; font-size: 1.5rem; animation: fall linear infinite; }
+        @keyframes fall { to { transform: translateY(100vh); } }
+        .countdown { background: rgba(255, 255, 255, 0.2); padding: 20px; border-radius: 10px; margin: 20px auto; width: fit-content; backdrop-filter: blur(5px); }
+        .countdown-numbers { display: flex; gap: 15px; justify-content: center; }
+        .countdown-item { background: rgba(196, 69, 54, 0.9); padding: 15px; border-radius: 8px; min-width: 80px; }
+        .countdown-value { font-size: 2rem; font-weight: bold; margin-bottom: 5px; font-family: monospace; }
+        .countdown-label { font-size: 0.9rem; opacity: 0.9; }
+        .cup-container { position: relative; margin-top: 20px; }
+        .cup { width: 150px; height: 200px; background: #C44536; border-radius: 0 0 20px 20px; position: relative; margin: 0 auto; }
+        .handle { width: 40px; height: 80px; border: 6px solid #C44536; border-radius: 40px; position: absolute; top: 50px; right: -45px; background: transparent; }
+        .snowflake-pattern { position: absolute; top: 50%; left: 50%; font-size: 8rem; color: white; transform: translate(-50%, -50%); }
+        .steam-container { position: absolute; top: -20px; left: 0; width: 100%; height: 200px; z-index: 3; }
+        .steam { position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; opacity: 0; }
+        .steam:nth-child(1) { left: 45%; width: 35px; height: 35px; animation: steam1 2.8s infinite; }
+        .steam:nth-child(2) { left: 50%; width: 40px; height: 40px; animation: steam2 3s infinite 0.2s; }
+        @keyframes steam1 { 0% { transform: translateY(0) scale(0.2); opacity: 0; } 40% { transform: translateY(-80px) scale(1); opacity: 0.7; } 100% { transform: translateY(-160px) scale(1.8); opacity: 0; } }
+        @keyframes steam2 { 0% { transform: translateY(0) scale(0.2); opacity: 0; } 40% { transform: translateY(-100px) scale(1.2); opacity: 0.8; } 100% { transform: translateY(-180px) scale(2); opacity: 0; } }
+    </style>
+</head>
+<body>
+    <div id="snowflakes"></div>
+    <div class="countdown">
+        <h2>Time Until Christmas</h2>
+        <div class="countdown-numbers">
+            <div class="countdown-item"><div id="days" class="countdown-value">00</div><div class="countdown-label">Days</div></div>
+            <div class="countdown-item"><div id="hours" class="countdown-value">00</div><div class="countdown-label">Hours</div></div>
+            <div class="countdown-item"><div id="minutes" class="countdown-value">00</div><div class="countdown-label">Minutes</div></div>
+            <div class="countdown-item"><div id="seconds" class="countdown-value">00</div><div class="countdown-label">Seconds</div></div>
+        </div>
+    </div>
+    <h1>Merry Christmas!</h1>
+    <p>Until Christmas, cozy up with a hot cup of cocoa!</p>
+    <div class="cup-container">
+        <div class="cup">
+            <div class="snowflake-pattern">&#10052;</div>
+            <div class="handle"></div>
+            <div class="steam-container">
+                <div class="steam"></div><div class="steam"></div><div class="steam"></div><div class="steam"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const snowflakesContainer = document.getElementById('snowflakes');
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '&#10052;';
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
+            snowflakesContainer.appendChild(snowflake);
+            setTimeout(() => snowflake.remove(), 5000);
+        }
+        setInterval(createSnowflake, 200);
+
+        function getTimeUntilChristmas() {
+            const now = new Date(), christmas = new Date(now.getFullYear(), 11, 25);
+            if (now > christmas) christmas.setFullYear(now.getFullYear() + 1);
+            const difference = christmas - now;
+            return {
+                days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((difference % (1000 * 60)) / 1000)
+            };
+        }
+
+        function updateCountdown() {
+            const timeLeft = getTimeUntilChristmas();
+            document.getElementById('days').textContent = String(timeLeft.days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(timeLeft.hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(timeLeft.minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(timeLeft.seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
